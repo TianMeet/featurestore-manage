@@ -50,9 +50,16 @@ const MyContent = () => {
             title: "实时数据源code",
             dataIndex: "rtCode",
             align: "center",
-            render: (_, record) => {
-                return record.rtCode;
-            },
+            render: (_, record) => (
+                <Button 
+                    onClick={() => {
+                        showDrawer();
+                        DetailRtDataSourceHandler(record.rtCode);
+                    }} 
+                    type="link" block>
+                    {record.rtCode}
+                </Button>
+            ),
         },
         {
             title: "名称",
@@ -380,6 +387,7 @@ const MyContent = () => {
 
     // 打开模态框
     const showModal = () => {
+       
         form.setFieldsValue({
             rtName: rtSourceInfo.rtName,
             rtDataValidity: rtSourceInfo.rtDataValidity,
@@ -388,6 +396,7 @@ const MyContent = () => {
             rtOwner: rtSourceInfo.rtOwner,
         });
         setVisible(true);
+        console.log(rtSourceInfo);
     };
 
     // 关闭模态框
@@ -560,9 +569,12 @@ const MyContent = () => {
         console.log(values);
         SaveRtDataSourceAPI(values)
             .then((res) => {
+                console.log(res);
                 if (res.code === 200) {
                     handleAddCancel();
                     GetListRtDataSourcHandler(current, pageSize);
+                }else if(res.code === 500){
+                    message.warning(res.msg)
                 }
             })
             .catch((e) => {
@@ -575,9 +587,9 @@ const MyContent = () => {
         DeleteRtDataSourceAPI(rtCode)
             .then((res) => {
                 console.log(res);
-
                 if (res.code === 200) {
                     message.success("实时数据源删除成功");
+                    GetListRtDataSourcHandler(current, pageSize)
                 } else if (res.code === 500) {
                     message.warning(res.msg);
                 }
@@ -688,6 +700,46 @@ const MyContent = () => {
                             gap: 8,
                         }}
                     >
+                        
+                        <Select
+                            placeholder='实时数据源状态'
+                            value={condition.rtStatus}
+                            style={{ width: 160 }}
+                            onChange={(value) => {
+                                setCondition((pre) => {
+                                    return { ...pre, rtStatus: value };
+                                });
+                            }}
+                            options={[
+                                { value: "INIT", label: "初始化" },
+                                { value: "ONLINE", label: "已上线" },
+                            ]}
+                        />
+                        <Select
+                            style={{ width: 120 }}
+                            placeholder='负责人'
+                            value={condition.rtOwner}
+                            onChange={(e) => {
+                                console.log(e);
+                                
+                                setCondition((pre) => {
+                                    return { ...pre, rtOwner: e };
+                                });
+                            }}
+                        >
+                            {userOptions.map((user) => {
+                                return <Select.Option key={user.id} value={user.username}>
+                                    <Space wrap
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        width: "100%",
+                                    }}>
+                                        <div>{user.username}</div>
+                                    </Space>
+                                </Select.Option>
+                            })}
+                        </Select>
                         <Select
                             placeholder='负责组'
                             style={{ width: 120 }}
@@ -702,29 +754,6 @@ const MyContent = () => {
                                 { value: 102, label: "风险小组" },
                                 { value: 103, label: "呼叫小组" },
                             ]}
-                        />
-                        <Select
-                            placeholder='实时数据源状态'
-                            value={condition.rtStatus}
-                            style={{ width: 120 }}
-                            onChange={(value) => {
-                                setCondition((pre) => {
-                                    return { ...pre, rtStatus: value };
-                                });
-                            }}
-                            options={[
-                                { value: "INIT", label: "初始化" },
-                                { value: "ONLINE", label: "已上线" },
-                            ]}
-                        />
-                        <Input
-                            placeholder='负责人'
-                            value={condition.rtOwner}
-                            onChange={(e) => {
-                                setCondition((pre) => {
-                                    return { ...pre, rtOwner: e.target.value };
-                                });
-                            }}
                         />
                         <Button type='primary' onClick={ResetCondition}>
                             重置查询条件
@@ -834,11 +863,11 @@ const MyContent = () => {
                         ]}
                     >
                         <Select>
-                            <Select.Option value='1'>L1</Select.Option>
-                            <Select.Option value='2'>L2</Select.Option>
-                            <Select.Option value='3'>L3</Select.Option>
-                            <Select.Option value='4'>L4</Select.Option>
-                            <Select.Option value='5'>L5</Select.Option>
+                            <Select.Option value={1}>L1</Select.Option>
+                            <Select.Option value={2}>L2</Select.Option>
+                            <Select.Option value={3}>L3</Select.Option>
+                            <Select.Option value={4}>L4</Select.Option>
+                            <Select.Option value={5}>L5</Select.Option>
                         </Select>
                     </Form.Item>
 
