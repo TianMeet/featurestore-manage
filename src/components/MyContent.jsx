@@ -39,7 +39,6 @@ import {
     RtWriteType,
 } from "../assets/dataDictionary/RtDataSource";
 import { formatTimestamp } from "../utils/formatTimestamp";
-import axios from "axios";
 const MyContent = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -387,7 +386,6 @@ const MyContent = () => {
 
     // 打开模态框
     const showModal = () => {
-       
         form.setFieldsValue({
             rtName: rtSourceInfo.rtName,
             rtDataValidity: rtSourceInfo.rtDataValidity,
@@ -396,7 +394,7 @@ const MyContent = () => {
             rtOwner: rtSourceInfo.rtOwner,
         });
         setVisible(true);
-        console.log(rtSourceInfo);
+        // console.log(rtSourceInfo);
     };
 
     // 关闭模态框
@@ -406,11 +404,11 @@ const MyContent = () => {
 
     // 实时数据源编辑
     const UpdateRtDataSourceHandler = (values) => {
-        console.log(values);
+        // console.log(values);
         
         UpdateRtDataSourceAPI(values)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (res.code === 200) {
                     message.success("实时数据源信息更新成功");
                     handleCancel();
@@ -474,12 +472,12 @@ const MyContent = () => {
     const ListInstanceHandler = () => {
         ListInstanceAPI()
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 const instanceNameList = [];
                 for (let i = 0; i < res.data.length; i++) {
                     instanceNameList.push(res.data[i]["instanceName"]);
                 }
-                console.log(instanceNameList);
+                // console.log(instanceNameList);
 
                 setInstanceNames(instanceNameList);
             })
@@ -498,12 +496,12 @@ const MyContent = () => {
     const ListDatabaseHandler = (instanceName) => {
         ListDatabaseAPI(instanceName)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 const dataBaseNameList = [];
                 for (let i = 0; i < res.data.length; i++) {
                     dataBaseNameList.push(res.data[i]["databaseName"]);
                 }
-                console.log(dataBaseNameList);
+                // console.log(dataBaseNameList);
 
                 setDbNames(dataBaseNameList);
             })
@@ -561,7 +559,7 @@ const MyContent = () => {
     // 提交实时数据源新增表单
     const handleSubmit = (values) => {
         values.rtCode = rtCode;
-        console.log(values);
+        // console.log(values);
         SaveRtDataSourceAPI(values)
             .then((res) => {
                 console.log(res);
@@ -581,7 +579,7 @@ const MyContent = () => {
     const DeleteRtDataSourceHandler = (rtCode) => {
         DeleteRtDataSourceAPI(rtCode)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (res.code === 200) {
                     message.success("实时数据源删除成功");
                     GetListRtDataSourcHandler(1, pageSize)
@@ -613,7 +611,7 @@ const MyContent = () => {
         ListRtDataSourceAPI({ pageNum: page, pageSize: pageSize, ...condition })
             .then((res) => {
                 if (res.code === 200) {
-                    console.log(res);
+                    // console.log(res);
                     setDataSource(res.data.list);
                     setTotal(res.data.total);
                 }
@@ -653,10 +651,10 @@ const MyContent = () => {
     const DetailRtDataSourceHandler = (rtCode) => {
         DetailRtDataSourceAPI(rtCode)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
 
                 if (res.code === 200) {
-                    console.log(res);
+                    // console.log(res);
                     setRtSourceInfo(res.data.sourceInfo);
                     setRtTableInfo(res.data.tableInfo);
                 } else if (res.code === 500) {
