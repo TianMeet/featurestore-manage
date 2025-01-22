@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button } from 'antd';
-import RtSourceManagePage from './page/rtSourceManagePage';
+import RtSourceManagePage from './page/RtSourceManagePage';
 
 function App() {
   return (

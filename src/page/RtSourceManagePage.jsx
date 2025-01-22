@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
+import React from 'react';
+
+import { Layout, theme } from 'antd';
 import MyContent from '../components/MyContent';
-const { Header, Sider, Content } = Layout;
+const { Header} = Layout;
 const RtSourceManagePage = () => {
-const [collapsed, setCollapsed] = useState(false);
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
   return (
     <Layout>
