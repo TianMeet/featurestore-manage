@@ -427,7 +427,7 @@ const MyContent = () => {
     const RegisterRtDataSourceHandler = (rtCode) => {
         RegisterRtDataSourceAPI(rtCode)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
 
                 if (res.code === 200) {
                     message.success("实时数据源上线成功");
@@ -457,7 +457,7 @@ const MyContent = () => {
         GetAllUserAPI()
             .then((res) => {
                 if (res.code === 200) {
-                    console.log(res);
+                    // console.log(res);
                     setUserOptions(res.data);
                     formAdd.setFieldValue;
                 }
@@ -566,6 +566,7 @@ const MyContent = () => {
                 if (res.code === 200) {
                     handleAddCancel();
                     GetListRtDataSourcHandler(current, pageSize);
+                    message.success("实时数据源新增成功")
                 }else if(res.code === 500){
                     message.warning(res.msg)
                 }
