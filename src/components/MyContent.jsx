@@ -406,6 +406,8 @@ const MyContent = () => {
 
     // 实时数据源编辑
     const UpdateRtDataSourceHandler = (values) => {
+        console.log(values);
+        
         UpdateRtDataSourceAPI(values)
             .then((res) => {
                 console.log(res);
@@ -414,8 +416,8 @@ const MyContent = () => {
                     handleCancel();
                     form.setFieldsValue({});
                     GetListRtDataSourcHandler(current, pageSize);
-                } else {
-                    message.error("个人信息更新失败");
+                } else if(res.code === 500) {
+                    message.warning(res.msg);
                 }
             })
             .catch((e) => {
@@ -467,13 +469,6 @@ const MyContent = () => {
             });
     };
 
-    // useEffect(() => {
-    //     // 初始化表单
-    //     formAdd.setFieldsValue({
-    //         username: null,
-    //         organizationCode: null,
-    //     });
-    // }, [formAdd]);
 
     // 获取实例名
     const ListInstanceHandler = () => {
@@ -563,7 +558,7 @@ const MyContent = () => {
         setRtCode("");
     };
 
-    // 提交表单
+    // 提交实时数据源新增表单
     const handleSubmit = (values) => {
         values.rtCode = rtCode;
         console.log(values);
@@ -589,7 +584,7 @@ const MyContent = () => {
                 console.log(res);
                 if (res.code === 200) {
                     message.success("实时数据源删除成功");
-                    GetListRtDataSourcHandler(current, pageSize)
+                    GetListRtDataSourcHandler(1, pageSize)
                 } else if (res.code === 500) {
                     message.warning(res.msg);
                 }
@@ -754,7 +749,21 @@ const MyContent = () => {
                                 { value: 102, label: "风险小组" },
                                 { value: 103, label: "呼叫小组" },
                             ]}
-                        />
+                        >
+                            {
+                                userOptions.reduce((acc, user) => {
+                                    if(!acc.includes(user.organizationCode)){
+                                        acc.push(user.organizationCode);
+                                    }
+                                    return acc;
+                                },[]).map(organ => {
+                                    <Select.Option key={organ} value={organ}>
+                                        {RtOrgan[organ]}
+                                    </Select.Option>
+                                })
+                                
+                            }
+                        </Select>
                         <Button type='primary' onClick={ResetCondition}>
                             重置查询条件
                         </Button>
@@ -845,9 +854,9 @@ const MyContent = () => {
                         ]}
                     >
                         <Select>
-                            <Select.Option value='realtime'>实时</Select.Option>
+                            <Select.Option value='realtime'>准实时(秒级)</Select.Option>
                             <Select.Option value='hardrealtime'>
-                                强实时
+                                强实时(无延迟)
                             </Select.Option>
                         </Select>
                     </Form.Item>
@@ -892,7 +901,18 @@ const MyContent = () => {
                             },
                         ]}
                     >
-                        <Input />
+                        <Select
+                            placeholder='实时数据源负责人'
+                        >
+                            {userOptions.map((user) => (
+                                <Select.Option
+                                    key={user.id}
+                                    value={user.username}
+                                >
+                                    {user.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                     <Form.Item
                         label={null}
@@ -911,6 +931,7 @@ const MyContent = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+            {/* 新增实时数据源 */}
             <Modal
                 title='新增实时数据源'
                 open={isModalVisible}
@@ -1039,10 +1060,7 @@ const MyContent = () => {
                                     {RtOrgan[rtOrgan]}
                                 </Select.Option>
                             )}
-                            {/* <Select.Option value={102}>风险小组</Select.Option>
-                            <Select.Option value={103}>呼叫小组</Select.Option> */}
                         </Select>
-                        {/* <Input disabled /> */}
                     </Form.Item>
 
                     <Form.Item
@@ -1076,7 +1094,7 @@ const MyContent = () => {
                     >
                         <Select placeholder='实时数据源写入类型'>
                             <Select.Option value='MODIFY'>增删改</Select.Option>
-                            <Select.Option value='ADD'>只增加</Select.Option>
+                            <Select.Option value='ADD'>只新增</Select.Option>
                         </Select>
                     </Form.Item>
 
@@ -1092,10 +1110,10 @@ const MyContent = () => {
                     >
                         <Select placeholder='实时数据源数据时效'>
                             <Select.Option value='realtime'>
-                                准实时
+                                准实时(秒级)
                             </Select.Option>
                             <Select.Option value='hardrealtime'>
-                                强实时
+                                强实时(无延迟)
                             </Select.Option>
                         </Select>
                     </Form.Item>
