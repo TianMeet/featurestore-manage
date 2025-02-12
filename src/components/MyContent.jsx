@@ -341,7 +341,7 @@ const MyContent = () => {
                         {rtTableInfo.rowSize}
                     </Descriptions.Item>
                     <Descriptions.Item label='平均每行长度'>
-                        {rtTableInfo.rowSize}
+                        {rtTableInfo.avgRowSize}
                     </Descriptions.Item>
                     <Descriptions.Item label='数据表描述'>
                         {rtTableInfo.tbDesc === "" ? "无" : rtTableInfo.tbDesc}
